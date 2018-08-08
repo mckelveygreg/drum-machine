@@ -1,18 +1,55 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import DrumSounds from './DrumSounds';
+import DrumSettings from './DrumSettings';
+import DrumContainer from './DrumContainer';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      currentSound: 'Make some noise!'
+    }
+
+    this.playSound = this.playSound.bind(this);
+  }
+
+
+  playSound(event) {
+    try { // need try/catch to filter out unmapped key presses
+      const drumKey = DrumSounds.find(item => (item.keyCode === event.keyCode || item.keyPressed === event.target.innerText)); // used find() to return object
+      const sound = document.getElementById(drumKey.keyPressed);
+      const drumpad = document.getElementById(drumKey.key);
+
+      sound.currentTime = 0;
+      
+      sound.play()
+      drumpad.setAttribute('class', 'drum-pad playing'); // change background
+      setTimeout(() => drumpad.setAttribute('class', 'drum-pad'), sound.duration * 1000); // reset class when clip finishes
+      
+      this.setState(
+        {
+        currentSound: drumKey.key
+      })
+
+      console.log(sound.attributes);
+    }
+    catch(error){
+      console.log(error);
+      console.log(event.key + ' not mapped to drumpad!');
+    }
+  }
+
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.playSound);
+  }
+  
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div id="drum-machine">
+        <DrumContainer drumSounds={DrumSounds} clickHandler={this.playSound}/>
+        <DrumSettings display={this.state.currentSound}/>
       </div>
     );
   }

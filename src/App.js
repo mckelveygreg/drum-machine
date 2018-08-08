@@ -17,7 +17,8 @@ class App extends Component {
 
   playSound(event) {
     try { // need try/catch to filter out unmapped key presses
-      const drumKey = DrumSounds.find(item => (item.keyCode === event.keyCode || item.keyPressed === event.target.innerText)); // used find() to return object
+      // used find() to return object
+      const drumKey = DrumSounds.find(item => (item.keyCode === event.keyCode || item.keyPressed === event.target.innerText)); // for both keyDown and onClick
       const sound = document.getElementById(drumKey.keyPressed);
       const drumpad = document.getElementById(drumKey.key);
 
@@ -30,9 +31,7 @@ class App extends Component {
       this.setState(
         {
         currentSound: drumKey.key
-      })
-
-      console.log(sound.attributes);
+      });
     }
     catch(error){
       console.log(error);
@@ -47,9 +46,12 @@ class App extends Component {
   
   render() {
     return (
-      <div id="drum-machine">
-        <DrumContainer drumSounds={DrumSounds} clickHandler={this.playSound}/>
-        <DrumSettings display={this.state.currentSound}/>
+      <div className='App'>
+        <h1>FreeCodeCamp Drum Machine Project</h1>
+        <div id="drum-machine">
+          <DrumContainer drumSounds={DrumSounds} clickHandler={this.playSound}/>
+          <DrumSettings display={this.state.currentSound}/>
+        </div>
       </div>
     );
   }

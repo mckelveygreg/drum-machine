@@ -17,6 +17,6 @@
   },
   "homepage": "https://mckelveygreg.github.io/drum-machine",
   "devDependencies": {
-    "gh-pages": "^1.2.0"
+    "gh-pages": "^2.1.0"
   }
 }
